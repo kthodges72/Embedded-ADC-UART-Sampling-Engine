@@ -1,0 +1,7 @@
+../Core/Src/circbuf.c:14:6:circbuf_init	1
+../Core/Src/circbuf.c:29:6:circbuf_is_empty	1
+../Core/Src/circbuf.c:39:6:circbuf_is_full	1
+../Core/Src/circbuf.c:53:6:circbuf_peek_contiguous	3
+../Core/Src/circbuf.c:80:6:circbuf_advance	1
+../Core/Src/circbuf.c:92:10:circbuf_count	2
+../Core/Src/circbuf.c:108:6:circbuf_write_byte	2

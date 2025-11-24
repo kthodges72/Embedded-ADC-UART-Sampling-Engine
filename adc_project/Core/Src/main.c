@@ -96,9 +96,9 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   circbuf_init(&txbuf);
-  	uart_init(&uart, &txbuf);
+  uart_init(&uart, &txbuf);
 
-  	uart_printf(&uart, "USART2 initialized!\r\n");
+  uart_DMA_printf(&uart, "USART2 initialized!\r\n");
 
   /* USER CODE END 2 */
 
@@ -108,7 +108,7 @@ int main(void)
   {
 
     /* USER CODE END WHILE */
-	  uart_printf(&uart, "Hello from STM32!\r\n");
+	  uart_DMA_printf(&uart, "Hello from STM32!\r\n");
 	  LL_mDelay(1000);
     /* USER CODE BEGIN 3 */
   }

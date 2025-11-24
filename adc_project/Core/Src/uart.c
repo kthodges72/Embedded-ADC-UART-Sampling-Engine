@@ -1,12 +1,19 @@
-#include "uart.h" // uart header file
-#include "stm32f4xx_ll_usart.h" // usart functions
-#include "stm32f4xx_ll_dma.h" // dma functions
-#include "circbuf.h" // circbuf functions
-#include <stdbool.h> // bool C standard libaray
+#include "uart.h"
+#include "stm32f4xx_ll_usart.h"
+#include "stm32f4xx_ll_dma.h"
+#include "circbuf.h"
+#include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 UART_Handle_t uart;
 
+/**
+  * @brief  Initialize uart_init module
+  * @param  *uart Pointer to the UART_Handle_t instance
+  * @param  *circ_buf Pointer to CircBuf instance
+  * @retval Void
+**/
 void uart_init(UART_Handle_t *uart, CircBuf *circ_buf) {
 
 	// initialize software state
@@ -16,7 +23,6 @@ void uart_init(UART_Handle_t *uart, CircBuf *circ_buf) {
 	uart->tx_buffer = NULL;
 	uart->tx_length = 0;
 	uart->tx_busy = false;
-	uart->data = false;
 
 	// ensure DMA stream 6 is disabled
 	LL_DMA_DisableStream(DMA1, uart->DMA_Stream);
@@ -39,7 +45,11 @@ void uart_init(UART_Handle_t *uart, CircBuf *circ_buf) {
 
 }
 
-
+/**
+  * @brief  Send largest contiguous chunk of data from circular buffer over DMA
+  * @param  *uart Pointer to the UART_Handle_t instance
+  * @retval Void
+**/
 void uart_send_dma(UART_Handle_t *uart) {
 
 	// check if tx busy; return
@@ -49,7 +59,7 @@ void uart_send_dma(UART_Handle_t *uart) {
 
 	// store buffer ptr and len values
 	uint8_t *chunk_ptr;
-	uint32_t chunk_len;
+	uint16_t chunk_len;
 	circbuf_peek_contiguous(uart->circ_buffer, &chunk_ptr, &chunk_len);
 
 	// set tx_buffer and tx_length fields
@@ -61,7 +71,6 @@ void uart_send_dma(UART_Handle_t *uart) {
 
 	// set tx state to busy
 	uart->tx_busy = true;
-	uart->data = true;
 
 	// wait until DMA stream is fully idle
 	LL_DMA_DisableStream(DMA1, uart->DMA_Stream);
@@ -78,6 +87,11 @@ void uart_send_dma(UART_Handle_t *uart) {
 
 }
 
+/**
+  * @brief  reset flags after DMA tranfer complete, recur if more data in buffer
+  * @param  *uart Pointer to the UART_Handle_t instance
+  * @retval Void
+**/
 void uart_handle_dma_irq(UART_Handle_t *uart) {
 
 	// if transfer complete flag enabled, clear flag, set tx_busy to false
@@ -85,15 +99,12 @@ void uart_handle_dma_irq(UART_Handle_t *uart) {
 		LL_DMA_ClearFlag_TC6(DMA1);
 		uart->tx_busy = false;
 
-		if (uart->data) {
-			// advance circbuf by tx_length
-			circbuf_advance(uart->circ_buffer, uart->tx_length);
+		// advance circbuf by tx_length
+		circbuf_advance(uart->circ_buffer, uart->tx_length);
 
-			// if more data, send again
-			if (circbuf_count(uart->circ_buffer) > 0) {
-				uart_send_dma(uart);
-			}
-			uart->data = false;
+		// if more data, send again
+		if (circbuf_count(uart->circ_buffer) > 0) {
+			uart_send_dma(uart);
 		}
 	}
 
@@ -111,10 +122,18 @@ void uart_handle_dma_irq(UART_Handle_t *uart) {
 	return;
 }
 
-// this print function uses polling
+/**
+  * @brief  Print sring to console using polling
+  * @note   Used for debugging
+  * @param  *uart Pointer to the UART_Handle_t instance
+  * @param  *str  Pointer to first char in string
+  * @retval Void
+**/
 void uart_printf(UART_Handle_t *uart, char *str) {
 
-	// while
+	while (uart->tx_busy) {
+	}
+
     while (*str != '\0') {
 
         while (!LL_USART_IsActiveFlag_TXE(uart->Instance)) {
@@ -130,18 +149,24 @@ void uart_printf(UART_Handle_t *uart, char *str) {
 
 
 
-// this print function uses DMA, and uart_send_DMA function
+/**
+  * @brief  Print string to console using circular buffer and DMA
+  * @note   This function uses the 'uart_send_dma' function
+  * @param  *uart Pointer to the UART_Handle_t instance
+  * @param  *str  Pointer to first char in string
+  * @retval Void
+**/
 void uart_DMA_printf(UART_Handle_t *uart, char *str)
 {
     // write all characters to circular buffer
     while (*str != '\0') {
-        circbuf_write_byte(uart->circ_buffer, (uint8_t)*str);
+        circbuf_write_byte(uart->circ_buffer, *str);
         str++;
     }
 
-    // start DMA if not already active
-    if (!uart->tx_busy) {
-        uart_send_dma(uart);
+    // send DMA if not already active
+    while (uart->tx_busy) {
     }
+        uart_send_dma(uart);
 }
 
