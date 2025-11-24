@@ -1,6 +1,7 @@
 #ifndef CIRCBUF_H
 #define CIRCBUF_H
 
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
