@@ -9,7 +9,6 @@
 #define CIRC_BUF_SIZE 256
 
 
-
 typedef struct {
 
 	uint16_t head;

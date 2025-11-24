@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 
-
 CircBuf txbuf;
 
 /**
