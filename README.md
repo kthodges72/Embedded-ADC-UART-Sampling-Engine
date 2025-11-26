@@ -13,13 +13,13 @@ The final application will continuously sample an analog audio signal using the 
 
 ### Project Structure Overview
 This repository follows the standard STM32CubeIDE project layout.  
-- **`Core/` **
-  The `Core/` directory contains all user-modifiable source files, including the `Inc/` and `Src/` folders where the custom UART and circular buffer modules live.**
-- **`Drivers/`** 
-  'Drivers/' holds the auto-generated STM32 HAL/LL and CMSIS libraries.**  
-- **'Debug/'**
-  Binary artifacts and build outputs are placed under `Debug/` by STM32CubeIDE.**
-- **Root foler**
+- 
+  The `Core/` directory contains all user-modifiable source files, including the `Inc/` and `Src/` folders where the custom UART and circular buffer modules live.
+-  
+  'Drivers/' holds the auto-generated STM32 HAL/LL and CMSIS libraries.  
+- 
+  Binary artifacts and build outputs are placed under `Debug/` by STM32CubeIDE.
+- 
   The root folder contains build configurations, linker scripts, IDE metadata (`.project`, `.cproject`, `.mxproject`), and the CubeMX configuration file (`adc_project.ioc`).**  
 
 
