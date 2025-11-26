@@ -20,7 +20,7 @@ This repository follows the standard STM32CubeIDE project layout.
 - 
   Binary artifacts and build outputs are placed under `Debug/` by STM32CubeIDE.
 - 
-  The root folder contains build configurations, linker scripts, IDE metadata (`.project`, `.cproject`, `.mxproject`), and the CubeMX configuration file (`adc_project.ioc`).**  
+  The root folder contains build configurations, linker scripts, IDE metadata (`.project`, `.cproject`, `.mxproject`), and the CubeMX configuration file (`adc_project.ioc`).  
 
 
 
