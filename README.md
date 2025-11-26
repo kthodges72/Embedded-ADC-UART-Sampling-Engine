@@ -6,13 +6,17 @@ The project is a work in progress, and this README will continue to grow as addi
 
 At the current stage, the project structure is complete, and two core modules are implemented: the UART driver (DMA-based USART2 TX) and the circular buffer module.
 
+### Project goal
+The final application will continuously sample an analog audio signal using the ADC, push each sample into a circular buffer, and stream the processed values over UART using DMA. On the host side (e.g., PuTTY), this will appear as a scrolling readout of real-time amplitude or decibel-equivalent measurements printed line by line. Once the core engine is complete, future improvements could include adding an RMS-based loudness calculation or implementing a live ASCII “volume bar” for terminal visualization. The audio signal is going to come from a an external microphone passed through a simple op-amp conditioning circuit that adds a DC bias and provides the appropriate gain for clean sampling on the STM32.
+
+
+
 ### Project Structure Overview
 This repository follows the standard STM32CubeIDE project layout.  
 The `Core/` directory contains all user-modifiable source files, including the `Inc/` and `Src/` folders where the custom UART and circular buffer modules live.  
 `Drivers/` holds the auto-generated STM32 HAL/LL and CMSIS libraries.  
 The root folder contains build configurations, linker scripts, IDE metadata (`.project`, `.cproject`, `.mxproject`), and the CubeMX configuration file (`adc_project.ioc`).  
 Binary artifacts and build outputs are placed under `Debug/` by STM32CubeIDE.
-
 
 
 # Core/Inc (Header Files)
