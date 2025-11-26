@@ -25,27 +25,29 @@ This repository follows the standard STM32CubeIDE project layout.
 This folder contains the public interfaces for modules included in the project.
 
 - **circbuf.h**  
-  Header for the circular buffer module.  
-  Defines the `CircBuf` struct, buffer size, and public API (`circbuf_init`, `circbuf_write_byte`, `circbuf_peek_contiguous`, etc.).
+  - Header for the circular buffer module.  
+  - Defines the `CircBuf` struct, buffer size, and public API (`circbuf_init`, `circbuf_write_byte`, `circbuf_peek_contiguous`, etc.).
 
 - **uart.h**  
-  Header for the USART2 DMA TX driver.  
-  Defines the UART handle structure, initialization routines, DMA transmit API, and the DMA IRQ callback.
+  - Header for the USART2 DMA TX driver.  
+  - Defines the UART handle structure, initialization routines, DMA transmit API, and the DMA IRQ callback.
 
 - **adc.h**   
-  Header for the adc module
-  Not implemented yet.
+  - Header for the adc module
+  - Not implemented yet.
   
 - **timer.h**
-  Header for the timer module.
-  Not implemented yet.
-  
+  - Header for the timer module
+  - Not implemented yet
+
 - **main.h**
-  Header for main.c
-  Global definitions or handles that need to be shared between modules.
-  
-- **stm32f4xx_it.h**, **system_stm32f4xx.h**, and other CubeMX-generated headers  
-  Provide MCU configuration, interrupt definitions, and system initialization prototypes.
+  - Header for main.c
+  - Global definitions or handles shared between modules
+
+- **stm32f4xx_it.h**, **system_stm32f4xx.h**, etc.
+  - Provide MCU configuration
+  - Contain interrupt definitions
+  - Contain system initialization prototypes
 
 ---
 
