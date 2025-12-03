@@ -37,8 +37,8 @@
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h:484:22:LL_GPIO_SetPinPull	48	static,ignoring_inline_asm
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h:910:22:LL_GPIO_ResetOutputPin	16	static
 ../Core/Src/main.c:70:5:main	8	static
-../Core/Src/main.c:122:6:SystemClock_Config	8	static
-../Core/Src/main.c:174:13:MX_USART2_UART_Init	64	static
-../Core/Src/main.c:248:13:MX_DMA_Init	16	static
-../Core/Src/main.c:266:13:MX_GPIO_Init	40	static
-../Core/Src/main.c:320:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:124:6:SystemClock_Config	8	static
+../Core/Src/main.c:176:13:MX_USART2_UART_Init	64	static
+../Core/Src/main.c:250:13:MX_DMA_Init	16	static
+../Core/Src/main.c:268:13:MX_GPIO_Init	40	static
+../Core/Src/main.c:322:6:Error_Handler	4	static,ignoring_inline_asm

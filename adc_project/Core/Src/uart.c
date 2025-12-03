@@ -7,12 +7,10 @@
 #include <stdlib.h>
 
 
-
-
 UART_Handle_t uart;
 
 /**
-  * @brief  Initialize uart_init module
+  * @brief  Initialize uart module
   * @param  *uart Pointer to the UART_Handle_t instance
   * @param  *circ_buf Pointer to CircBuf instance
   * @retval Void
@@ -121,7 +119,6 @@ void uart_handle_dma_irq(UART_Handle_t *uart) {
 	if (LL_DMA_IsActiveFlag_FE6(DMA1)) {
 		LL_DMA_ClearFlag_FE6(DMA1);
 	}
-
 	return;
 }
 

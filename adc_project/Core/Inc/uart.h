@@ -14,7 +14,7 @@
 typedef struct {
 
 	USART_TypeDef *Instance; // which USART
-	uint32_t DMA_Stream; // DMA stream index (for LL functions)
+	uint32_t DMA_Stream; // DMA stream index-pointer (for LL functions)
 	CircBuf *circ_buffer; // pointer to circ buffer struct
 	uint8_t *tx_buffer; // pointer to active buffer
 	uint32_t tx_length; // number of bytes remaining

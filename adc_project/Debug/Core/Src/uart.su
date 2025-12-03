@@ -18,8 +18,8 @@
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usart.h:1814:26:LL_USART_IsActiveFlag_TXE	16	static
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usart.h:2349:22:LL_USART_EnableDMAReq_TX	40	static,ignoring_inline_asm
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usart.h:2426:22:LL_USART_TransmitData8	16	static
-../Core/Src/uart.c:17:6:uart_init	16	static
-../Core/Src/uart.c:53:6:uart_send_dma	24	static
-../Core/Src/uart.c:95:6:uart_handle_dma_irq	16	static
-../Core/Src/uart.c:132:6:uart_printf	16	static
-../Core/Src/uart.c:159:6:uart_DMA_printf	16	static
+../Core/Src/uart.c:20:6:uart_init	16	static
+../Core/Src/uart.c:56:6:uart_send_dma	24	static
+../Core/Src/uart.c:98:6:uart_handle_dma_irq	16	static
+../Core/Src/uart.c:134:6:uart_printf	16	static
+../Core/Src/uart.c:161:6:uart_DMA_printf	16	static
