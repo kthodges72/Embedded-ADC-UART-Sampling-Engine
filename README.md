@@ -5,11 +5,15 @@ This repository contains my personal STM32 embedded systems project.
 ### Project Overview
 The final project samples an analog audio signal using ADC, triggered by a software timer interrupt at a set sample rate of 20kHz. The samples are processed in real time using an envelope smoothing filter, implementing a low-pass filter algorithm on the individual samples. The display is updated by another software timer interrupt at a set rate of 30Hz. Each update, the current processed sample value is taken, and compared to output an ASCII bar 'interval level.' This ASCII bar is pushed into a 256 byte circular buffer, which is being continuously drained and outputted through UART over DMA. On the host side (e.g., PuTTY), this will appear as a smooth ASCII volume bar, refreshing at 30Hz and reflecting the volume level near the microphone of my microphone-amp circuit.
 
+https://github.com/user-attachments/assets/8328af5d-13f6-46a3-9c7f-f524532ffb0e
+
 ### Project goal
 I built the project strictly using STM32's LL (low level) driver library, with the goal of interacting as closely with the hardware as possible. I felt that removing the layers of abstraction that libraries such as STM32's HAL library, or Arduino's provided libraries would allow me to better understand the architecture of the industry-standard STM32. Due to this, I gained a better understanding of computer architecture, as well as practical experience writing low-level drivers for a future career in Firmware or Systems Software Engineering.
 
 ### Microphone-Amplifier Circuit
 This circuit utilizes a simple electret microphone and the TI-LM358 integrated circuit to provide the STM32's ADC1 peripheral with an amplified AC signal.
+![IMG_6451](https://github.com/user-attachments/assets/59a61215-80dc-403d-a182-4b7dd931ddad)
+![IMG_6453](https://github.com/user-attachments/assets/ab354cad-037d-42f7-9358-fac500c82f3d)
 
 
 ### Project Structure 
