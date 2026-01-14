@@ -7,7 +7,7 @@ The final project samples an analog audio signal using ADC, triggered by a softw
 
 
 
-https://github.com/user-attachments/assets/0e17359c-f2bc-4a3a-af7e-319b155d2e43
+https://github.com/user-attachments/assets/a94b6217-c14e-4d83-930d-37559b328074
 
 
 
