@@ -12,7 +12,7 @@ https://github.com/user-attachments/assets/a94b6217-c14e-4d83-930d-37559b328074
 
 
 ### Project goal
-I built the project strictly using STM32's LL (low level) driver library, with the goal of interacting as closely with the hardware as possible. I felt that removing the layers of abstraction that libraries such as STM32's HAL library, or Arduino's provided libraries would allow me to better understand the architecture of the industry-standard STM32. Due to this, I gained a better understanding of computer architecture, as well as practical experience writing low-level drivers for a future career in Firmware or Systems Software Engineering.
+I built the project strictly using STM32’s LL (low-level) driver library, with the goal of interacting as closely with the hardware as possible. By removing the layers of abstraction provided by libraries such as STM32’s HAL or Arduino’s libraries, I was able to gain a deeper understanding of the STM32’s architecture. As a result, I developed stronger knowledge of computer architecture and gained practical experience writing low-level drivers, directly supporting my interest in a future career in firmware or systems software engineering.
 
 ### Microphone-Amplifier Circuit
 This circuit utilizes a simple electret microphone and the TI-LM358 integrated circuit to provide the STM32's ADC1 peripheral with an amplified AC signal.
