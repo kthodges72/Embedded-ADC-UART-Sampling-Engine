@@ -3,7 +3,7 @@
 This repository contains my personal STM32 embedded systems project.
 
 ### Project Overview
-The final project samples an analog audio signal using ADC, triggered by a software timer interrupt at a set sample rate of 20kHz. The samples are processed in real time using an envelope smoothing filter, implementing a low-pass filter algorithm on the individual samples. The display is updated by another software timer interrupt at a set rate of 30Hz. Each update, the current processed sample value is taken, and compared to output an ASCII bar 'interval level.' This ASCII bar is pushed into a 256 byte circular buffer, which is being continuously drained and outputted through UART over DMA. On the host side (e.g., PuTTY), this will appear as a smooth ASCII volume bar, refreshing at 30Hz and reflecting the volume level near the microphone of my microphone-amp circuit.
+The final project samples an analog audio signal using ADC, triggered by a software timer interrupt at a set sample rate of 20kHz. The samples are processed in real time using an envelope smoothing filter, implementing a low-pass filter algorithm on the individual samples. The display is updated by another software timer interrupt at a set rate of 30Hz. Each update, the current processed sample value is taken, and compared to output an ASCII bar 'interval level.' This ASCII bar is pushed into a 256 byte circular buffer, which is being continuously drained and outputted through UART over DMA. On the host side (e.g., PuTTY), this will appear as a smooth ASCII volume bar, reflecting the volume level near the microphone of my microphone-amp circuit.
 
 
 
