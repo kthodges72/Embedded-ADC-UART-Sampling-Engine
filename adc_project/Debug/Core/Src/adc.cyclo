@@ -1,0 +1,10 @@
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:3870:22:LL_ADC_Enable	1
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:3921:22:LL_ADC_REG_StartConversionSWStart	1
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:3989:26:LL_ADC_REG_ReadConversionData12	1
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:4290:26:LL_ADC_IsActiveFlag_EOCS	1
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:4343:22:LL_ADC_ClearFlag_EOCS	1
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:4354:22:LL_ADC_ClearFlag_OVR	1
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h:4575:22:LL_ADC_EnableIT_EOCS	1
+../Core/Src/adc.c:20:6:adc_init	1
+../Core/Src/adc.c:45:6:adc_start_conversion	1
+../Core/Src/adc.c:56:6:adc_handle_irq	2

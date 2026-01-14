@@ -1,3 +1,15 @@
+/**
+ * uart.c
+ * -------
+ * UART transmission driver using DMA and a circular buffer.
+ *
+ * Provides non-blocking output over USART2 by
+ * buffering characters (with circbuf module) and
+ * transmitting the largest contiguous chunk via DMA.
+ *
+ * Designed for low CPU burden.
+ **/
+
 #include "uart.h"
 #include "stm32f4xx_ll_usart.h"
 #include "stm32f4xx_ll_dma.h"
@@ -6,7 +18,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-
+// initialize // global UART_Handle_t instance
 UART_Handle_t uart;
 
 /**
@@ -15,7 +27,7 @@ UART_Handle_t uart;
   * @param  *circ_buf Pointer to CircBuf instance
   * @retval Void
 **/
-void uart_init(UART_Handle_t *uart, CircBuf *circ_buf) {
+void uart_init(UART_Handle_t* uart, CircBuf* circ_buf) {
 
 	// initialize software state
 	uart->Instance = USART2;
@@ -51,7 +63,7 @@ void uart_init(UART_Handle_t *uart, CircBuf *circ_buf) {
   * @param  *uart Pointer to the UART_Handle_t instance
   * @retval Void
 **/
-void uart_send_dma(UART_Handle_t *uart) {
+void uart_send_dma(UART_Handle_t* uart) {
 
 	// check if tx busy; return
 	if (uart->tx_busy) {
@@ -59,7 +71,7 @@ void uart_send_dma(UART_Handle_t *uart) {
 	}
 
 	// store buffer ptr and len values
-	uint8_t *chunk_ptr;
+	uint8_t* chunk_ptr;
 	uint16_t chunk_len;
 	circbuf_peek_contiguous(uart->circ_buffer, &chunk_ptr, &chunk_len);
 
@@ -89,11 +101,11 @@ void uart_send_dma(UART_Handle_t *uart) {
 }
 
 /**
-  * @brief  reset flags after DMA tranfer complete, recur if more data in buffer
+  * @brief  Reset flags after DMA tranfer complete, recur if more data in buffer
   * @param  *uart Pointer to the UART_Handle_t instance
   * @retval Void
 **/
-void uart_handle_dma_irq(UART_Handle_t *uart) {
+void uart_handle_dma_irq(UART_Handle_t* uart) {
 
 	// if transfer complete flag enabled, clear flag, set tx_busy to false
 	if (LL_DMA_IsActiveFlag_TC6(DMA1)) {
@@ -129,7 +141,7 @@ void uart_handle_dma_irq(UART_Handle_t *uart) {
   * @param  *str  Pointer to first char in string
   * @retval Void
 **/
-void uart_printf(UART_Handle_t *uart, char *str) {
+void uart_printf(UART_Handle_t* uart, char* str) {
 
 	while (uart->tx_busy) {
 	}
@@ -156,7 +168,7 @@ void uart_printf(UART_Handle_t *uart, char *str) {
   * @param  *str  Pointer to first char in string
   * @retval Void
 **/
-void uart_DMA_printf(UART_Handle_t *uart, char *str)
+void uart_DMA_printf(UART_Handle_t* uart, char* str)
 {
     // write all characters to circular buffer
     while (*str != '\0') {
@@ -165,8 +177,8 @@ void uart_DMA_printf(UART_Handle_t *uart, char *str)
     }
 
     // send DMA if not already active
-    while (uart->tx_busy) {
+    if (!uart->tx_busy) {
+            uart_send_dma(uart);
     }
-        uart_send_dma(uart);
 }
 

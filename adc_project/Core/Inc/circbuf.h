@@ -1,3 +1,15 @@
+/**
+ * circbuf.h
+ * ----------
+ * Fixed-size circular buffer implementation.
+ *
+ * Provides overwrite-on-full logic
+ *
+ * Provides contiguous section 'length calculation'
+ * for efficient DMA transfers.
+ **/
+
+
 #ifndef CIRCBUF_H
 #define CIRCBUF_H
 
@@ -12,13 +24,14 @@
 
 typedef struct {
 
-	uint16_t head;
-	uint16_t tail;
-	uint16_t size;
+	uint16_t head; // pointer to head of circular buffer data
+	uint16_t tail; // pointer to tail of circular buffer data
+	uint16_t size; // size of buffer
 	uint8_t buffer[CIRC_BUF_SIZE];
 
 } CircBuf;
 
+// global CircBuf instance
 extern CircBuf txbuf;
 
 
@@ -27,7 +40,7 @@ extern CircBuf txbuf;
   * @param  *circbuf Pointer to the CircBuf instance
   * @retval Void
 **/
-void circbuf_init(CircBuf *circbuf);
+void circbuf_init(CircBuf* circbuf);
 
 /**
  *  @brief  Set urn pointer to start of contiguous chunk (buffer values until end of circular buffer),
@@ -37,7 +50,7 @@ void circbuf_init(CircBuf *circbuf);
   * @param  *len Pointer to length of contiguous chunk
   * @retval Void
 **/
-void circbuf_peek_contiguous(CircBuf *circbuf, uint8_t **ptr, uint16_t *len);
+void circbuf_peek_contiguous(CircBuf* circbuf, uint8_t** ptr, uint16_t* len);
 
 /**
   * @brief  Advance tail the length of the chunk that was just sent over DMA
@@ -45,14 +58,14 @@ void circbuf_peek_contiguous(CircBuf *circbuf, uint8_t **ptr, uint16_t *len);
   * @param  len Length of chunk that was just sent over DMA
   * @retval Void
 **/
-void circbuf_advance(CircBuf *circbuf, uint16_t len);
+void circbuf_advance(CircBuf* circbuf, uint16_t len);
 
 /**
   * @brief  Return int of count of values currently in buffer
   * @param  *circbuf Pointer to the CircBuf instance
   * @retval 16 bit int of count of values currently in buffer
 **/
-uint16_t circbuf_count(CircBuf *circbuf);
+uint16_t circbuf_count(CircBuf* circbuf);
 
 /**
   * @brief  Write a single byte to buffer, advance head
@@ -61,7 +74,7 @@ uint16_t circbuf_count(CircBuf *circbuf);
   * @param  byte Byte of data to by written to buffer (char, ADC value)
   * @retval Void
 **/
-void circbuf_write_byte(CircBuf *circbuf, uint8_t byte);
+void circbuf_write_byte(CircBuf* circbuf, uint8_t byte);
 
 /**
   * @brief  Return true if buffer is empty
@@ -69,7 +82,7 @@ void circbuf_write_byte(CircBuf *circbuf, uint8_t byte);
   * @retval - true if empty
   * 		- false if not empty
 **/
-bool circbuf_is_empty(CircBuf *circbuf);
+bool circbuf_is_empty(CircBuf* circbuf);
 
 /**
   * @brief  Return true if buffer is full
@@ -77,7 +90,7 @@ bool circbuf_is_empty(CircBuf *circbuf);
   * @retval - true if full
   * 		- false if not full
 **/
-bool circbuf_is_full(CircBuf *circbuf);
+bool circbuf_is_full(CircBuf* circbuf);
 
 
 #endif
