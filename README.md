@@ -1,17 +1,18 @@
-# Embedded ADC–UART Sampling Engine (Work in Progress)
+# Embedded ADC–UART Audio Visualization System
 
 This repository contains my personal STM32 embedded systems project.
 
-The project is a work in progress, and this README will continue to grow as additional modules (ADC, timer) are implemented. 
-
-At the current stage, the project structure is complete, and two core modules are implemented: the UART driver (DMA-based USART2 TX) and the circular buffer module.
+### Project Overview
+The final project samples an analog audio signal using ADC, triggered by a software timer interrupt at a set sample rate of 20kHz. The samples are processed in real time using an envelope smoothing filter, implementing a low-pass filter algorithm on the individual samples. The display is updated by another software timer interrupt at a set rate of 30Hz. Each update, the current processed sample value is taken, and compared to output an ASCII bar 'interval level.' This ASCII bar is pushed into a 256 byte circular buffer, which is being continuously drained and outputted through UART over DMA. On the host side (e.g., PuTTY), this will appear as a smooth ASCII volume bar, refreshing at 30Hz and reflecting the volume level near the microphone of my microphone-amp circuit.
 
 ### Project goal
-The final application will continuously sample an analog audio signal using the ADC (driven by a timer interrupt), run the samples through a low-pass filter accumulator, push each sample into a circular buffer, and stream the processed values over UART using DMA. On the host side (e.g., PuTTY), this will appear as a scrolling readout of real-time amplitude or decibel-equivalent measurements printed line by line. Once the core engine is complete, future improvements could include adding an RMS-based loudness calculation or implementing a live ASCII “volume bar” for terminal visualization. The audio signal is going to come from a an external microphone passed through a simple op-amp conditioning circuit that adds a DC bias and provides the appropriate gain for clean sampling on the STM32.
+I built the project strictly using STM32's LL (low level) driver library, with the goal of interacting as closely with the hardware as possible. I felt that removing the layers of abstraction that libraries such as STM32's HAL library, or Arduino's provided libraries would allow me to better understand the architecture of the industry-standard STM32. Due to this, I gained a better understanding of computer architecture, as well as practical experience writing low-level drivers for a future career in Firmware or Systems Software Engineering.
+
+### Microphone-Amplifier Circuit
+This circuit utilizes a simple electret microphone and the TI-LM358 integrated circuit to provide the STM32's ADC1 peripheral with an amplified AC signal.
 
 
-
-### Project Structure Overview
+### Project Structure 
 This repository follows the standard STM32CubeIDE project layout.  
 - `Core/` contains all user-modifiable source files, including the `Inc/` and `Src/` folders where the custom UART and circular buffer modules live.
 - `Drivers/` holds the auto-generated STM32 HAL/LL and CMSIS libraries.  
@@ -34,11 +35,15 @@ This folder contains the public interfaces for modules included in the project.
 
 - **adc.h**   
   - Header for the adc module
-  - Not implemented yet.
+  - Defines the ADC handle structure and ADC API
   
 - **timer.h**
   - Header for the timer module
-  - Not implemented yet
+  - Defines the timer handle structure and interrupt functions
+
+- **display.h**
+  - Header for the display module
+  - Defines the display handle structure and functions
 
 - **main.h**
   - Header for main.c
@@ -55,14 +60,14 @@ This folder contains the public interfaces for modules included in the project.
 
 This folder contains firmware logic and low-level drivers.
 
-### Completed Modules
+### Modules
 
 - **circbuf.c**  
   Implements a 256-byte circular buffer for transmitting outgoing data.  
-  Supports:
+  Features:
   - contiguous block discovery for DMA,
   - wrap-aware pointer movement,
-  - efficient ISR-friendly writes,
+  - efficient writes,
   - overwrite-on-full behavior for real-time streaming.
 
   This module acts as the data staging layer between ADC sampling (future) and UART transmission.
@@ -77,6 +82,28 @@ This folder contains firmware logic and low-level drivers.
   - seamless integration with `circbuf`.
 
   This module forms the backbone of the outbound data pipeline.
+
+- **adc.c**
+  Implements ADC conversion and interrupt handling using LL drivers.
+  Features:
+  - ADC end of completion flag for interrupt handling,
+  - sample reading, handling and storage.
+
+  This module handles the ADC sampling for processing and output
+
+- **timer.c**
+  Implements two hardware-driven timers for ADC sampling and display updating.
+  Features:
+  - timer initalization for TIM2 and TIM3, setting prescaler and autoreload values,
+  - interrupt handling, setting software flags for ADC sampling and display updating.
+
+  This module controls the timing of adc and display modules
+  
+- **display.c**
+  Implements envelope-smoothed volume bar display
+  Features:
+  - smoothing envelope follower for smooth human-readable volume bar
+  - volume bar level determined by processed samples
 
 - **main.c**  
   Integrates and initializes the modules.  
@@ -99,66 +126,16 @@ This folder contains firmware logic and low-level drivers.
 - **adc.c**, **timer.c**  
   Not yet implemented.  
   These will be populated with sampling and timer logic.
+  
+ ### Key Technical Highlights
+- Interrupt-driven ADC sampling at 20 kHz
+- Real-time envelope follower implemented via IIR low-pass filtering
+- Double-timer architecture separating signal acquisition and UI refresh
+- Zero-copy UART DMA transmission using a circular buffer staging layer
+- Entire project implemented using STM32 LL drivers (no HAL abstractions)
+ 
 
 ---
 
-# Modules Implemented (2)
 
-## 1. Circular Buffer (`circbuf`)
 
-This module provides a fixed-size (256-byte) FIFO ring buffer used to store outgoing data before DMA transmission. It provides:
-
-- `circbuf_write_byte` for writing to buffer. 
-- `circbuf_peek_contiguous` to expose a DMA-ready memory region  
-- wrap-aware index advancement  
-- overwrite-on-full behavior to prevent data stalls  
-- fast full/empty checks and byte-accurate count queries
-
-It is used as the intermediate staging area for streaming ADC samples and UART transmission.
-
----
-
-## 2. UART DMA Transmission (`uart`)
-
-This module implements a non-blocking USART2 transmit driver using DMA1 Stream 6. It includes:
-
-- LL-based USART2 configuration  
-- DMA TX setup and memory-to-peripheral configuration  
-- a custom `UART_Handle_t` for driver state  
-- an interrupt-driven DMA completion handler  
-- `uart_send_dma` and `uart_DMA_printf` for pushing data into the TX pipeline  
-- integration with the circular buffer for continuous streaming
-
-This module is fully operational and verified.
-
----
-
-# Modules To Be Completed
-
-These modules have no logic yet:
-
-## 3. ADC Sampling Module (Planned)
-- Configure ADC1 using LL drivers  
-- Set up timer trigger for stable sampling frequency  
-- Implement conversion complete callback  
-- Push 16-bit samples into the circular buffer as two bytes  
-
-## 4. Timer Module (Planned)
-- Configure TIMx for periodic triggers  
-- Drive ADC sampling  
-- Provide timing hooks for future tasks
-
-These modules will be documented as they are implemented.
-
----
-
-# Current Status Summary
-
-At this stage of development:
-
-1. The file structure is organized.  
-2. The UART DMA-TX module is complete and tested.  
-3. The circular buffer module is complete and tested.  
-4. `main.c` integrates both modules and supports basic output.
-
-This README will be updated as progress continues.
