@@ -7,6 +7,10 @@ The final project samples an analog audio signal using ADC, triggered by a softw
 
 
 
+London Calling on vinyl :)
+
+
+
 https://github.com/user-attachments/assets/a94b6217-c14e-4d83-930d-37559b328074
 
 
